@@ -14,7 +14,7 @@ router.post('/signup',(req,res)=>{
 
     users.findOne({$or:[{email:email,fullname:fullname}]}).then(saveuser=>{
         if(saveuser){
-            res.status(422).json({error:"There is an error"})
+            res.status(422).json({error:"User already exists"})
         }else{
 
             bcrypt.hash(password,12).then((hashpass)=>{
@@ -27,10 +27,11 @@ router.post('/signup',(req,res)=>{
                     conformPassword:conformPassword
                 }
             ).then((users) => {
-                createTokenAndSaveCookies(users._id,res)
-                res.json("Created Successfully")
+                // createTokenAndSaveCookies(users._id,res)
+                res.json("SignUp Successfully")
             }).catch(error=>{
-                res.status(422).json({error:error})
+                console.log(error)
+                res.status(422).json({error:"Please try again with unique details"})
             });
             })
         }
@@ -45,14 +46,14 @@ router.post('/singin',(req,res)=>{
     }else{
         users.findOne({email}).then(saveusers=>{
             if(!saveusers){
-                res.json({eror:"User not exists"})
+                res.json({error:"User not exists"})
             }else{
                 bcrypt.compare(password,saveusers.password).then(match=>{
                     if(!match){
                         res.status(422).json({error:"There is a error"})
                     }else{
-                        createTokenAndSaveCookies(saveusers._id,res)
-                        res.json({saveusers})
+                       const token=jwt.sign({_id:saveusers._id},process.env.jwt_secreat)
+                        res.json({_id:saveusers._id,token:token})
                     }
                 })
             }

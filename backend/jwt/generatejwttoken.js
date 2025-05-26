@@ -7,6 +7,7 @@ const createTokenAndSaveCookies= async (userid,res)=>{
         secure:true,
         sameSite:"strict"
     })
+    return token
 }
 
 export default createTokenAndSaveCookies
