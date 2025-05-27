@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
-
 import mongoose from 'mongoose'
+import users from '../model/singup.js'
 
 const userjwt=(req,res,next)=>{
     const {authorization}=req.headers
@@ -11,6 +11,7 @@ const userjwt=(req,res,next)=>{
         const token= authorization.replace("Bearer ","")
         jwt.verify(token,process.env.jwt_secreat,(err,payload)=>{
             if(err){
+                console.log(err)
                 res.status(422).json({error:"logout"})
             }else{
                 const {_id}=payload
@@ -18,7 +19,7 @@ const userjwt=(req,res,next)=>{
                     if(!saveuser){
                         res.status(422).json({error:"logout"})
                     }else{
-                        res.json(saveuser)
+                        req.user=saveuser
                         next()
                     }
                 });

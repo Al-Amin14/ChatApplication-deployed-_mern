@@ -1,14 +1,24 @@
 import React, { useState } from 'react';
 import { Search } from 'lucide-react'; // Lucide icon for search
+import { useEffect } from 'react';
 
-const contacts = Array(10).fill({
-  name: 'Ankit Pathak',
-  email: 'Ankit@gmail.com',
-  avatar: 'https://cdn.prod.website-files.com/62d84e447b4f9e7263d31e94/6399a4d27711a5ad2c9bf5cd_ben-sweet-2LowviVHZ-E-unsplash-1.jpeg',
-});
+
 
 const ChatSidebar = () => {
   const [selectedIndex, setSelectedIndex] = useState(2);
+
+  const [contacts, setContacts] = useState([{}]);
+
+  useEffect(() => {
+    fetch("http://localhost:3000/users/alluser",{
+        method:"get",
+        headers:{
+          "Authorization":"Bearer "+localStorage.getItem('jwt'),
+          "content-type":"application/json"},
+      }).then(res=>res.json()).then(result=>{
+        setContacts(result); 
+      })
+  }, []);
 
   return (
     <div className="w-full h-screen bg-black text-white flex flex-col p-2">
@@ -26,7 +36,7 @@ const ChatSidebar = () => {
 
       {/* Contact List */}
       <div className="flex-1 overflow-y-scroll scrollbar-hide">
-        {contacts.map((contact, index) => (
+        {contacts!=null && contacts.map((contact, index) => (
           <div
             key={index}
             onClick={() => setSelectedIndex(index)}
@@ -37,13 +47,13 @@ const ChatSidebar = () => {
             <div>
                 <img className='w-3 fixed left-9' src="../images/icon.png" alt="not present" />
                 <img
-                src={contact.avatar}
-                alt={contact.name}
+                src="../images/icon.png"
+                alt={contact.fullname}
                 className="w-14 h-12 rounded-full"
                 />
             </div>
             <div>
-              <div className="font-semibold">{contact.name}</div>
+              <div className="font-semibold">{contact.fullname}</div>
               <div className="text-sm text-gray-400">{contact.email}</div>
             </div>
           </div>
