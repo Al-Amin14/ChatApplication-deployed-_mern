@@ -30,6 +30,7 @@ const LoginPage = () => {
         }else{
           toast.success("You have successlly loged in")
           localStorage.setItem('jwt',result.token)
+          localStorage.setItem('id',result.id)
           navigate("/")
         }
       })

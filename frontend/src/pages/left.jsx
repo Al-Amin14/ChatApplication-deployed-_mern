@@ -1,15 +1,23 @@
 import React, { useState } from 'react';
 import { Search } from 'lucide-react'; // Lucide icon for search
 import { useEffect } from 'react';
+import useConversation from '../statemanagent/useConversation';
+import { useSocketContext } from '../context/socketcontent';
 
 
 
 const ChatSidebar = () => {
-  const [selectedIndex, setSelectedIndex] = useState(2);
+  const {selectedConversation,setSelectedConversation}=useConversation()
+  // const isSelected=selectedConversation?._id===User._id
 
   const [contacts, setContacts] = useState([{}]);
 
+  const {socket,Onlineuser}=useSocketContext()
+  const isOnline=Onlineuser.includes(localStorage.getItem('id'))
+
+
   useEffect(() => {
+    console.log("-----")
     fetch("http://localhost:3000/users/alluser",{
         method:"get",
         headers:{
@@ -21,7 +29,7 @@ const ChatSidebar = () => {
   }, []);
 
   return (
-    <div className="w-full h-screen bg-black text-white flex flex-col p-2">
+    <div className="w-full h-full bg-black text-white flex flex-col p-2">
       {/* Search Bar with Icon */}
       <div className="relative mb-4">
         <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
@@ -39,17 +47,17 @@ const ChatSidebar = () => {
         {contacts!=null && contacts.map((contact, index) => (
           <div
             key={index}
-            onClick={() => setSelectedIndex(index)}
+            onClick={() => setSelectedConversation(contact)}
             className={`flex items-center gap-3 px-4 py-3 cursor-pointer ${
-              selectedIndex === index ? 'bg-gray-700' : 'hover:bg-gray-800'
+               selectedConversation?._id === contact._id ? 'bg-gray-700' : 'hover:bg-gray-800'
             }`}
           >
             <div>
-                <img className='w-3 fixed left-9' src="../images/icon.png" alt="not present" />
+               {Onlineuser.includes(contact._id) ? (<img className='w-3 left-9' src="../images/icon.png" alt="not present" />) : (<div></div>)} 
                 <img
-                src="../images/icon.png"
+                src="https://www.shutterstock.com/image-vector/user-profile-icon-vector-avatar-600nw-2220431045.jpg"
                 alt={contact.fullname}
-                className="w-14 h-12 rounded-full"
+                className="w-12 h-12 rounded-full"
                 />
             </div>
             <div>

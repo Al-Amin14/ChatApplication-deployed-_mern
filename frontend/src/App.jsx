@@ -6,7 +6,9 @@ import Signup from './pages/signup';
 import ChatSidebar from './pages/left';
 import ChatUI from './pages/right';
 import Chathome from './pages/chathome';
+import LoadingScreen from './pages/loading';
 import { ToastContainer } from 'react-toastify';
+import {SocketProvider}  from './context/socketcontent';
 
 const App = () => {
   const [loggedin, setLoggedin] = useState(false);
@@ -14,7 +16,10 @@ const App = () => {
   return (
     <BrowserRouter>
       <appContext.Provider value={{ loggedin }}>
+        <SocketProvider >
+
         <Routes>
+          {/* <Route path='/' element={<LoadingScreen />}></Route> */}
           <Route path='/' element={<Chathome />}></Route>
           <Route path='/login' element={<Login />}></Route>
           <Route path='/signup' element={<Signup/>}></Route>
@@ -31,6 +36,7 @@ const App = () => {
           pauseOnHover
           theme="light"
           />
+          </SocketProvider>
       </appContext.Provider>
     </BrowserRouter>
   )
