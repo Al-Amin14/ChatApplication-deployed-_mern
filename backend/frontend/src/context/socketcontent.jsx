@@ -16,7 +16,7 @@ export const SocketProvider=({children})=>{
     useEffect(() => {
         if(authUser){
             console.log("auth is here"+authUser)
-            const sockets= io('http://localhost:3000',{
+            const sockets= io('https://chatapplication-deployed-mern-4l41.onrender.com',{
                 query:{
                     useId:authUser,
                 }}
