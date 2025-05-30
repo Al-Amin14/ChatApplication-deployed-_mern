@@ -4,7 +4,7 @@ import mongoose from 'mongoose'
 import Message from '../model/message.js'
 import Conversation from '../model/conversation.js'
 import userjwt from '../moddleware/usertoken.js'
-import { getReciverid } from '../Socketio/server.js'
+import { getReciverid , io  } from '../Socketio/server.js'
 
 router.post('/send/:id',userjwt,async (req,res)=>{
 
@@ -36,7 +36,7 @@ router.post('/send/:id',userjwt,async (req,res)=>{
             if(receiversocketit){
                 io.to(receiversocketit).emit("newMessage",result)
             }
-            res.json(conversation)
+            res.json(result)
         })
     } catch (error) {
         res.status(422).json(error)

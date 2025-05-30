@@ -1,11 +1,12 @@
 import React, { useState ,useRef , useEffect } from 'react';
 import getMessages from '../context/getMessages';
-import message from '../../../backend/model/message';
+import message from '../../../model/message';
 import LoadingScreen from './loading';
 import useConversation from '../statemanagent/useConversation';
 import sendMessage from '../context/sendMessage';
 import { IoSend } from "react-icons/io5";
 import { useSocketContext } from '../context/socketcontent';
+import useGetSocketMessage from '../context/socketMessage';
 
 const ChatBubble = ({ text, isSender , isreceive,scrolling }) => (
   <div ref={scrolling} className={`flex ${isSender==localStorage.getItem('id') ? 'justify-start' : isreceive==localStorage.getItem('id')? 'justify-start' :'justify-end'} my-1`}>
@@ -27,6 +28,7 @@ const Allchat = () => {
     const { loadingMsg,sendMessageuser } =sendMessage()
     const {socket,Onlineuser}=useSocketContext()
 
+    useGetSocketMessage()
 
     const lastMsgRef = useRef()
 
@@ -77,4 +79,3 @@ const Allchat = () => {
 }
 
 export default Allchat
- 

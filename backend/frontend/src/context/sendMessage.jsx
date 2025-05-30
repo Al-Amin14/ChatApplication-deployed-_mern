@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import useConversation from '../statemanagent/useConversation.js'
-import getMessages from '../context/getMessages.jsx'
+import getMessages from './getMessages.jsx'
 
 const sendMessage = () => {
 
   const [loadingMsg, setLoadingMsg] = useState(false);
-  const {setMessages,selectedConversation}=useConversation()
+  const {setMessages,selectedConversation,messages}=useConversation()
 
   const sendMessageuser=(messagetxt)=>{
     setLoadingMsg(true)
@@ -20,17 +20,10 @@ const sendMessage = () => {
               message:messagetxt
           })
     }).then(res=>res.json()).then(result=>{
-      fetch(`http://localhost:3000/message/allmessage/${selectedConversation==null?sendvalue:selectedConversation._id}`,{
-        method:"get",
-        headers:{
-            "content-type":"application/json",
-            "authorization":"Bearer "+localStorage.getItem('jwt')
-        }
-    }).then(res=>res.json()).then(result=>{
-        setMessages(result.messages)
-        setLoadingMsg(false)
-    })
-    })
+    setMessages([...messages,result])
+    setLoadingMsg(false)
+    }
+  )
   }
 
   return {

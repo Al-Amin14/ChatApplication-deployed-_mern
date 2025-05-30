@@ -20,6 +20,7 @@ const getMessages = () => {
             "authorization":"Bearer "+localStorage.getItem('jwt')
         }
     }).then(res=>res.json()).then(result=>{
+        console.log(result.messages)
         setMessages(result.messages)
         setLoading(false)
     })
